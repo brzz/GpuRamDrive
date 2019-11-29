@@ -49,6 +49,20 @@ int APIENTRY wWinMain(
 	_In_ LPWSTR lpCmdLine,
 	_In_ int nCmdShow)
 {
+	//Õë¶ÔAMD openclµÄÐÞÕý lcq
+	//////////////////////////////////////////
+	std::string newEnv = "GPU_MAX_ALLOC_PERCENT=100";
+	putenv(newEnv.c_str());
+	newEnv = "GPU_MAX_HEAP_SIZE=100";
+	putenv(newEnv.c_str());
+	newEnv = "GPU_SINGLE_ALLOC_PERCENT=100";
+	putenv(newEnv.c_str());
+	newEnv = "GPU_USE_SYNC_OBJECTS=1";
+	putenv(newEnv.c_str());
+	newEnv = "GPU_FORCE_64BIT_PTR=1";
+	putenv(newEnv.c_str());
+	std::string env = getenv("GPU_MAX_ALLOC_PERCENT");
+	//////////////////////////////////////////
 	GpuRamGui gui;
 
 	LPWSTR *szArglist;

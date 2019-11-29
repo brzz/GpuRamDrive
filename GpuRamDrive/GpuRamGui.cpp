@@ -107,7 +107,10 @@ void GpuRamGui::Mount(const std::wstring& device, size_t size, const std::wstrin
 
 	m_RamDrive.SetDriveType(driveType.c_str());
 	m_RamDrive.SetRemovable(removable);
-	m_RamDrive.CreateRamDevice(vGpu[n].platform_id, vGpu[n].device_id, L"GpuRamDev", memSize, driveLetter.c_str(), formatParam);
+
+	//多实例第二处修正 lcq
+	srand((unsigned)time(NULL));
+	m_RamDrive.CreateRamDevice(vGpu[n].platform_id, vGpu[n].device_id, L"GpuRamDev" + std::to_wstring(rand() % 10000), memSize, driveLetter.c_str(), formatParam);
 
 	ComboBox_SetCurSel(m_CtlGpuList, n);
 	ComboBox_SetCurSel(m_CtlDriveLetter, (driveLetter[0] <= 'Z' ? driveLetter[0] - 'A' : driveLetter[0] - 'a'));
@@ -268,7 +271,10 @@ void GpuRamGui::OnMountClicked()
 		{
 			m_RamDrive.SetDriveType(driveType);
 			m_RamDrive.SetRemovable(driveRemovable);
-			m_RamDrive.CreateRamDevice(vGpu[n].platform_id, vGpu[n].device_id, L"GpuRamDev", memSize, szTemp, formatParam);
+
+			//多实例第一处修正 lcq
+			srand((unsigned)time(NULL));
+			m_RamDrive.CreateRamDevice(vGpu[n].platform_id, vGpu[n].device_id, L"GpuRamDev" + std::to_wstring(rand() % 10000), memSize, szTemp, formatParam);
 		}
 		catch (const std::exception& ex)
 		{

@@ -343,7 +343,28 @@ void GPURamDrive::GpuAllocateRam()
 		throw std::runtime_error("Unable to create command queue: " + std::to_string(clRet));
 	}
 
-	m_GpuMem = clCreateBuffer(m_Context, CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR, m_MemSize, nullptr, &clRet);
+	//export GPU_MAX_ALLOC_PERCENT = 100;
+
+
+
+
+	cl_ulong c = 0;
+	clGetDeviceInfo(m_DeviceId, CL_DEVICE_MAX_MEM_ALLOC_SIZE, sizeof(cl_ulong), &c, nullptr);
+	//if (m_MemSize > c)
+	//{
+	//	throw std::runtime_error("Failed! This Device Max Alloc Size: " + std::to_string(c/1024/1024) + "MB");
+	//}
+	
+	//Õë¶ÔAMDÐÞÕý  lcq
+	m_pBuff = new char[m_MemSize];
+	m_GpuMem = clCreateBuffer(m_Context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR , m_MemSize, m_pBuff, &clRet);
+	free(m_pBuff); m_pBuff = nullptr;
+
+	//m_GpuMem = clCreateBuffer(m_Context, CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR, m_MemSize, nullptr, &clRet);
+	//cl_kernel kernel = clCreateKernel(nullptr, "test", &clRet);
+	//clRet = clSetKernelArg(kernel, 0, sizeof(cl_mem), (void *)&m_GpuMem);
+	//clRet = clEnqueueNDRangeKernel(m_Queue, kernel, 0, NULL, 0, 0, 0, NULL, NULL);
+
 	if (m_GpuMem == nullptr) {
 		throw std::runtime_error("Unable to create memory buffer: " + std::to_string(clRet));
 	}
